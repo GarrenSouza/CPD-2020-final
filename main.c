@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "triePatricia.h"
+#include "./dataStructures/triePatricia.h"
 #include <stdlib.h>
 
 int main()
