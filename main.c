@@ -1,9 +1,9 @@
 #include <stdio.h>
-#include "./dataStructures/triePatricia.h"
 #include <stdlib.h>
 
-int main()
-{
+#include "./dataStructures/triePatricia.h"
+
+int main() {
     // char *string = (char *)malloc(4 * sizeof(char));
     // free(string + 1);
     trieNode *Tree = createTrieNode();

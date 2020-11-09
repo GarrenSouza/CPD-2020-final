@@ -1,6 +1,5 @@
 
-typedef struct trieNode
-{
+typedef struct trieNode {
     char *string;
     char isEndOfWord;
     int childCounter;

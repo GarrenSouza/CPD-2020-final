@@ -1,4 +1,5 @@
 #include "./triePatricia.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,12 +18,10 @@
 
 #endif
 
-trieNode *createTrieNode()
-{
+trieNode *createTrieNode() {
     trieNode *newTrie = (trieNode *)malloc(sizeof(trieNode));
     newTrie->childs = (trieNode **)malloc(ALPHABET_SIZE * sizeof(trieNode *));
-    for (size_t i = 0; i < ALPHABET_SIZE; i++)
-    {
+    for (size_t i = 0; i < ALPHABET_SIZE; i++) {
         newTrie->childs[i] = NULL;
     }
     newTrie->string = NULL;
@@ -32,35 +31,26 @@ trieNode *createTrieNode()
     return newTrie;
 }
 
-char *allocString(char *string)
-{
+char *allocString(char *string) {
     char *newString = (char *)malloc((strlen(string) + 1) * sizeof(char));
     strcpy(newString, string);
     newString[strlen(string)] = '\0';
     return newString;
 }
 
-trieNode *insertNode(char *string, trieNode *root)
-{
-    if (root->childCounter == 0 && root->string == NULL)
-    {
+trieNode *insertNode(char *string, trieNode *root) {
+    if (root->childCounter == 0 && root->string == NULL) {
         root->string = allocString(string);
         root->isEndOfWord = TRUE;
-    }
-    else
-    {
+    } else {
         size_t i = 0;
         for (; string[i] != '\0' && root->string[i] != '\0' && string[i] == root->string[i]; i++)
             ;
-        if (i == strlen(root->string))
-        {
-            if (i == strlen(string))
-            {
+        if (i == strlen(root->string)) {
+            if (i == strlen(string)) {
                 root->isEndOfWord = TRUE;
                 return root;
-            }
-            else if (root->childs[string[i]] == NULL)
-            {
+            } else if (root->childs[string[i]] == NULL) {
                 trieNode *newNode = createTrieNode();
                 newNode->string = allocString(string);
                 newNode->isEndOfWord = TRUE;
@@ -71,9 +61,7 @@ trieNode *insertNode(char *string, trieNode *root)
             }
             root->childs[string[i]] = insertNode(string + i, root->childs[string[i]]);
             return root;
-        }
-        else
-        {
+        } else {
             trieNode *newRoot = createTrieNode();
             newRoot->string = (char *)malloc((i + 1) * sizeof(char));
             strncpy(newRoot->string, string, i);
@@ -98,15 +86,13 @@ trieNode *insertNode(char *string, trieNode *root)
     }
 }
 
-trieNode *searchNode(char *string, trieNode *root)
-{
+trieNode *searchNode(char *string, trieNode *root) {
     if (root == NULL)
         return NULL;
     size_t i = 0;
     for (; string[i] != '\0' && root->string[i] != '\0' && string[i] == root->string[i]; i++)
         ;
-    if (i == strlen(root->string))
-    {
+    if (i == strlen(root->string)) {
         if (i == strlen(string))
             if (root->isEndOfWord)
                 return root;
@@ -118,42 +104,34 @@ trieNode *searchNode(char *string, trieNode *root)
     return NULL;
 }
 
-void printPatricia(trieNode *root)
-{
+void printPatricia(trieNode *root) {
     if (root == NULL)
         ;
-    else
-    {
+    else {
         if (root->isEndOfWord)
             printf("*");
         printf("%s", root->string);
-        if (root->parent != NULL)
-        {
+        if (root->parent != NULL) {
             printf(", %s", root->parent->string);
         }
         printf(" Childs: %d\n", root->childCounter);
-        for (size_t i = 0; i < ALPHABET_SIZE; i++)
-        {
+        for (size_t i = 0; i < ALPHABET_SIZE; i++) {
             printPatricia(root->childs[i]);
         }
     }
 }
 
-void deleteNode(char *string, trieNode *root)
-{
+void deleteNode(char *string, trieNode *root) {
     trieNode *aux = searchNode(string, root), *auxParent;
-    if (aux != NULL)
-    {
-        if (aux->childCounter == 0)
-        {
+    if (aux != NULL) {
+        if (aux->childCounter == 0) {
             auxParent = aux->parent;
             (auxParent->childCounter)--;
             auxParent->childs[aux->string[0]] = NULL;
 
             destroyTrieNodeLocally(aux);
 
-            if (auxParent->childCounter == 1)
-            {
+            if (auxParent->childCounter == 1) {
                 size_t i = 0;
                 for (; i < ALPHABET_SIZE && auxParent->childs[i] == NULL; i++)
                     ;
@@ -168,14 +146,12 @@ void deleteNode(char *string, trieNode *root)
                 for (size_t i = 0; i < ALPHABET_SIZE; i++)
                     free(auxParent->childs[i]);
             }
-        }
-        else
+        } else
             aux->isEndOfWord = FALSE;
     }
 }
 
-void destroyTrieNodeLocally(trieNode *node)
-{
+void destroyTrieNodeLocally(trieNode *node) {
     free(node->string);
     for (size_t i = 0; i < ALPHABET_SIZE; i++)
         free(node->childs[i]);
