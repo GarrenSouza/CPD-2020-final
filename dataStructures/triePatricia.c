@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef BOOLEANS
+#ifndef _BOOLEANS_
 
 #define TRUE 1
 #define FALSE 0
@@ -39,29 +39,32 @@ char *allocString(char *string) {
 }
 
 trieNode *insertNode(char *string, trieNode *root) {
-    if (root->childCounter == 0 && root->string == NULL) {
+    if (root->childCounter == 0 && root->string == NULL) {  // First node case
         root->string = allocString(string);
         root->isEndOfWord = TRUE;
+        return root;
     } else {
         size_t i = 0;
         for (; string[i] != '\0' && root->string[i] != '\0' && string[i] == root->string[i]; i++)
             ;
-        if (i == strlen(root->string)) {
-            if (i == strlen(string)) {
+        if (i == strlen(root->string)) {  // Root string was covered
+            if (i == strlen(string)) {    // We have a match
                 root->isEndOfWord = TRUE;
                 return root;
-            } else if (root->childs[string[i]] == NULL) {
+
+            } else if (root->childs[string[i]] == NULL) {  // We got to a leaf and stll no match
                 trieNode *newNode = createTrieNode();
                 newNode->string = allocString(string);
                 newNode->isEndOfWord = TRUE;
                 newNode->parent = root;
+
                 (root->childCounter)++;
                 root->childs[string[i]];
                 return root;
             }
-            root->childs[string[i]] = insertNode(string + i, root->childs[string[i]]);
+            root->childs[string[i]] = insertNode(string + i, root->childs[string[i]]);  // No cover, not in a leaf, let's continue searching
             return root;
-        } else {
+        } else {  // Node spliting case (Root string must be split to allocate the new Node)
             trieNode *newRoot = createTrieNode();
             newRoot->string = (char *)malloc((i + 1) * sizeof(char));
             strncpy(newRoot->string, string, i);
@@ -93,21 +96,20 @@ trieNode *searchNode(char *string, trieNode *root) {
     for (; string[i] != '\0' && root->string[i] != '\0' && string[i] == root->string[i]; i++)
         ;
     if (i == strlen(root->string)) {
-        if (i == strlen(string))
+        if (i == strlen(string)) {
             if (root->isEndOfWord)
                 return root;
             else
                 return NULL;
-        else
+        } else {
             return searchNode(string + i, root->childs[string[i]]);
+        }
     }
     return NULL;
 }
 
 void printPatricia(trieNode *root) {
-    if (root == NULL)
-        ;
-    else {
+    if (root != NULL) {
         if (root->isEndOfWord)
             printf("*");
         printf("%s", root->string);
