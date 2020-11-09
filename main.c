@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "./dataStructures/triePatricia.h"
+#include "./dataStructures/triePatricia/triePatricia.h"
 
 int main() {
     // char *string = (char *)malloc(4 * sizeof(char));
