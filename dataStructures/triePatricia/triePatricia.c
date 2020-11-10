@@ -159,3 +159,33 @@ void destroyTrieNodeLocally(trieNode *node) {
         free(node->childs[i]);
     free(node);
 }
+
+void collectWithPrefix(char *string, trieNode *root, ListNode *queryResult) {
+    if (root != NULL) {
+        size_t i = 0;
+        for (; string[i] != '\0' && root->string[i] != '\0' && root->string[i] == string[i]; i++)
+            ;
+        if (i) {
+            if (strlen(string) == strlen(root->string))
+                collectAllStrings(root, queryResult);
+            else
+                collectWithPrefix(string + i, root->childs[string[i]], queryResult);
+        }
+    }
+}
+
+void collectAllStrings(trieNode *root, ListNode *queryResult) {
+    if (root != NULL) {
+        if (root->childCounter == 0) {
+            strcat(stringBuffer, root->string);
+            pushListNode((void *)allocString(stringBuffer), queryResult);
+        } else {
+            strcat(stringBuffer, root->string);
+            int n = strlen(stringBuffer);
+            for (size_t i = 0; i < ALPHABET_SIZE; i++) {
+                collectAllStrings(root->childs[i], queryResult);
+                stringBuffer[n] = '\0';
+            }
+        }
+    }
+}

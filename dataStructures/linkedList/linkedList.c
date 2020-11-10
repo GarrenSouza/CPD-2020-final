@@ -36,6 +36,7 @@ ListNode* pushListNode(void* value, ListNode* head) {
     }
     return newNode;
 }
+
 ListNode* popListNode(ListNode* head) {
     ListNode *auxNode = head, *prev = NULL;
     if (auxNode != NULL) {
