@@ -50,3 +50,11 @@ ListNode* popListNode(ListNode* head) {
     }
     return NULL;
 }
+
+void printList(ListNode* head) {
+    ListNode* aux = head->nextNode;
+    while (aux != NULL) {
+        printf("%s\n", (char*)aux->value);
+        aux = aux->nextNode;
+    }
+}

@@ -8,4 +8,5 @@ ListNode* createListNode();
 ListNode* pushListNode(void* value, ListNode* head);
 ListNode* popListNode(ListNode* head);
 void destroyListNode(ListNode* head);
+void printList(ListNode* head);
 // implement a toString method
