@@ -4,6 +4,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifndef _BOOLEANS_
+#define TRUE 1;
+#define FALSE 0;
+#endif
+
 // Headers
 #include "hashTable.h"
 

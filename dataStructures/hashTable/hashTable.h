@@ -1,6 +1,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "../linkedList/linkedList.h"
+
 #ifndef _HASH_CONFIG
 #define OPEN_ADDRESS_CR 0
 #define CLOSED_ADDRESS_CR 1
@@ -14,15 +16,13 @@
 #define MURMUR_SEED_COEFCIENT 0x0855e30d  //random number
 #endif
 
-#ifndef _BOOLEAN
-#define TRUE 1;
-#define FALSE 0;
-#endif
-
 typedef struct stringNode {
-    char *string;
-    struct stringNode *nextString;
     uint8_t isActive;
+    char *string;
+    size_t ID, ratingCounter;
+    double averageRating;
+    ListNode *genres;
+    struct stringNode *nextString;
 } stringNode;
 
 typedef struct stringHashTable {
