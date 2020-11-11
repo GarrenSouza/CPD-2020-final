@@ -1,5 +1,7 @@
 #include <stdlib.h>
 
+#define LINKED_LIST 1
+
 #include "../linkedList/linkedList.h"
 
 #ifndef _BOOLEANS_
