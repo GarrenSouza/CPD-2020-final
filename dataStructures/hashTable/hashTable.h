@@ -1,7 +1,11 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#ifndef LINKED_LIST
+
 #include "../linkedList/linkedList.h"
+
+#endif
 
 #ifndef _HASH_CONFIG
 #define OPEN_ADDRESS_CR 0

@@ -15,6 +15,13 @@
 // External dependencies
 #include "dependencies/murmur3.h"
 
+char *_allocString(char *string) {
+    char *newString = (char *)malloc((strlen(string) + 1) * sizeof(char));
+    strcpy(newString, string);
+    newString[strlen(string)] = '\0';
+    return newString;
+}
+
 uint32_t murmurHashing(char *string, uint32_t seed) {
     uint32_t hash;
     MurmurHash3_x86_32((const void *)string, strlen(string),
@@ -36,7 +43,7 @@ int ClosedAddressingInsert(stringHashTable *hashTable, char *string) {
     if ((hashTable->load) < (hashTable->size) && hashTable->searchKey(hashTable, string) == -1) {
         stringNode *newString = (stringNode *)malloc(sizeof(stringNode));
         uint32_t hash = hashTable->mainHashingFunction(string, hashTable->type & 1 ? MURMUR_SEED_COEFCIENT : POLYNOMIAL_COEFCIENT) % hashTable->size;
-        newString->string = string;
+        newString->string = _allocString(string);
         newString->nextString = *(hashTable->dataArray + hash);
         *(hashTable->dataArray + hash) = newString;
         (hashTable->load)++;
