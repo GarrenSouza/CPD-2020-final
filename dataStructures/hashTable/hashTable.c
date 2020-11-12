@@ -39,12 +39,14 @@ uint32_t polynomialHashing(char *string, uint32_t coeficient) {
 
 // // Closed Addressing (Chaining)
 
-int ClosedAddressingInsert(stringHashTable *hashTable, char *string) {
+int ClosedAddressingInsert(stringHashTable *hashTable, char *string, size_t ID, ListNode *genres) {
     if ((hashTable->load) < (hashTable->size) && hashTable->searchKey(hashTable, string) == -1) {
         stringNode *newString = (stringNode *)malloc(sizeof(stringNode));
         uint32_t hash = hashTable->mainHashingFunction(string, hashTable->type & 1 ? MURMUR_SEED_COEFCIENT : POLYNOMIAL_COEFCIENT) % hashTable->size;
         newString->string = _allocString(string);
         newString->nextString = *(hashTable->dataArray + hash);
+        newString->ID = ID;
+        newString->genres = genres;
         *(hashTable->dataArray + hash) = newString;
         (hashTable->load)++;
         if (newString->nextString != NULL) (hashTable->collisions)++;
@@ -89,7 +91,7 @@ int ClosedAddressingSearch(stringHashTable *hashTable, char *string) {
 
 // // Open Addressing
 
-int OpenAddressingInsert(stringHashTable *hashTable, char *string) {
+int OpenAddressingInsert(stringHashTable *hashTable, char *string, size_t ID, ListNode *genres){
     if ((hashTable->load) < (hashTable->size) && hashTable->searchKey(hashTable, string) == -1) {
         uint32_t hash = hashTable->mainHashingFunction(string, hashTable->type & 1 ? MURMUR_SEED_COEFCIENT : POLYNOMIAL_COEFCIENT);
         uint32_t hashTableSize = hashTable->size;
@@ -109,8 +111,10 @@ int OpenAddressingInsert(stringHashTable *hashTable, char *string) {
             aux->isActive = TRUE;
         } else {
             stringNode *newString = (stringNode *)malloc(sizeof(stringNode));
-            newString->string = string;
+            newString->string = _allocString(string);
             newString->isActive = TRUE;
+            newString->ID = ID;
+            newString->genres = genres;
             *(hashTable->dataArray + hash % hashTable->size) = newString;
         }
         (hashTable->load)++;

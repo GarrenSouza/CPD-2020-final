@@ -9,11 +9,12 @@
 int main(void) {
     FILE* file = fopen("movie.csv", "r");
     trieNode* tree = createTrieNode();
-    stringHashTable* hashTable = createHashTable(256, CLOSED_ADDRESS_CR, MURMUR_HASHING_FUNCTION);
+    stringHashTable* hashTable = createHashTable(30000, CLOSED_ADDRESS_CR, MURMUR_HASHING_FUNCTION);
+    ListNode* genres = createListNode();
 
     char readBuffer[256];
     char movieTitle[256];
-    char *genre;
+    char *genreBuffer;
 
     size_t id;
     if (file != NULL) {
@@ -36,15 +37,17 @@ int main(void) {
             tree = insertNode(movieTitle, id, tree);
             // printf("%ld\n", wordCounter(tree));
             
-            genre = strtok(readBuffer + j + 3, "|");
-            while(genre != NULL){
-                if(genre[strlen(genre) - 1] == '\n'){
-                    genre[strlen(genre) - 2] = '\0';
+            genreBuffer = strtok(readBuffer + j + 3, "|");
+            while(genreBuffer != NULL){
+                if(genreBuffer[strlen(genreBuffer) - 1] == '\n'){
+                    genreBuffer[strlen(genreBuffer) - 2] = '\0';
                 }
+                genres = pushListNode((void*)allocString(genreBuffer), genres);
                 // printf("%s\n", genre);
-                hashTable->add(hashTable, genre);
-                genre = strtok(NULL, "|");
-            }        
+                genreBuffer = strtok(NULL, "|");
+            }
+            hashTable->add(hashTable, movieTitle, (size_t)id, genres);
+            // destroyListNode(genres);
         }
 
         printHashTable(hashTable, TRUE);

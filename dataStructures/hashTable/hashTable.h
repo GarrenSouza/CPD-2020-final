@@ -38,7 +38,7 @@ typedef struct stringHashTable {
     uint8_t type;
     int (*delete)(struct stringHashTable *, char *string),
         (*searchKey)(struct stringHashTable *, char *string),
-        (*add)(struct stringHashTable *, char *string);
+        (*add)(struct stringHashTable *hashTable, char *string, size_t ID, ListNode *genres);
 } stringHashTable;
 
 // HashTable Methods
@@ -49,12 +49,12 @@ void printHashTable(stringHashTable *hashTable, int printEntries);
 // // Addressing Methods
 
 // Closed Addressing Methods
-int ClosedAddressingInsert(stringHashTable *hashTable, char *string);
+int ClosedAddressingInsert(stringHashTable *hashTable, char *string, size_t ID, ListNode *genres);
 int ClosedAddressingDelete(stringHashTable *hashTable, char *string);
 int ClosedAddressingSearch(stringHashTable *hashTable, char *string);
 
 // Open Address Methods
-int OpenAddressingInsert(stringHashTable *hashTable, char *string);
+int OpenAddressingInsert(stringHashTable *hashTable, char *string, size_t ID, ListNode *genres);
 int OpenAddressingDelete(stringHashTable *hashTable, char *string);
 int OpenAddressingSearch(stringHashTable *hashTable, char *string);
 
