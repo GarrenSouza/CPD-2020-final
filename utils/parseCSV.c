@@ -9,6 +9,15 @@
 #include "../dataStructures/hashTable/hashTable.h"
 #include "../dataStructures/triePatricia/triePatricia.h"
 
+void clearScreen() {
+#ifndef _WIN32
+    system("clear");
+#endif
+#ifdef _WIN32
+    system("cls");
+#endif
+}
+
 int main(void) {
     char fileName[] = "movie.csv";
     FILE* file = fopen(fileName, "r");
@@ -57,28 +66,18 @@ int main(void) {
         // float seconds = (float)(end - start) / CLOCKS_PER_SEC;
         // printf("|%s was processed in %f\n", fileName, difftime(end, start));
     } else
-        printf("Deu ruim man!");
 
+        printf("Deu ruim man!");
     printf("garren&Pedro@CPD2020:~/%s$ ", fileName);
     fgets(readBuffer, 256, stdin);
     readBuffer[strlen(readBuffer) - 1] = '\0';
     while (strcmp(readBuffer, "exit")) {
         if (strcmp(readBuffer, "clear") == 0) {
-            system("clear");
+            clearScreen();
         } else if (strncmp(readBuffer, "movie ", 6) == 0 && strlen(readBuffer) > 6) {
             ListNode* query = createListNode();
 
             collectWithPrefix(readBuffer + 6, tree, query);
-
-            // ListNode* aux = query->nextNode;
-
-            // while (aux != NULL) {
-            //     printf("%s\n", (char*)aux->value);
-            //     stringNode* entry = hashTable->getEntry(hashTable, ((char*)(popListNode(aux))->value));
-            //     // printf("ID: %ld | Title: %s | Genres: ", entry->ID, entry->string);
-            //     // printList(query);
-            //     aux = aux->nextNode;
-            // }
             if (query->nextNode != NULL) {
                 printf("\n");
                 printList(query);
@@ -93,12 +92,6 @@ int main(void) {
         fgets(readBuffer, 256, stdin);
         readBuffer[strlen(readBuffer) - 1] = '\0';
     }
-    // ListNode* query = createListNode();
-    // collectAllStrings(tree, query);
-    // printList(query);
-
-    // printf("\n\n");
-    // printPatricia(tree);
-    system("clear");
+    clearScreen();
     return 0;
 }
