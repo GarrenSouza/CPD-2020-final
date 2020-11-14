@@ -50,7 +50,7 @@ trieNode *insertNode(char *string, size_t ID, trieNode *root) {
 
             } else if (root->childs[string[i]] == NULL) {  // We got to a leaf and stll no match
                 trieNode *newNode = createTrieNode();
-                newNode->string = allocString(string);
+                newNode->string = allocString(string + i);
                 newNode->ID = ID;
                 newNode->isEndOfWord = TRUE;
                 newNode->parent = root;
@@ -66,22 +66,23 @@ trieNode *insertNode(char *string, size_t ID, trieNode *root) {
             newRoot->string = (char *)malloc((i + 1) * sizeof(char));
             strncpy(newRoot->string, string, i);
             newRoot->string[i] = '\0';
-            root->string = allocString(root->string + i);
+            // root->string = allocString(root->string + i);
             newRoot->parent = root->parent;
 
             trieNode *newChild = createTrieNode();
-            newChild->string = (char *)malloc((strlen(string) - i + 1) * sizeof(char));
             newChild->string = allocString(string + i);
             newChild->isEndOfWord = TRUE;
             newChild->parent = newRoot;
             newChild->ID = ID;
 
-            newRoot->childs[newChild->string[0]] = newChild;
-            newRoot->childs[root->string[0]] = root;
-            (newRoot->childCounter) = 2;
-
             root->parent = newRoot;
+            root->string = root->string + i;
+            // strcpy(root->string, (root->string) + i);
 
+            newRoot->childs[(newChild->string)[0]] = newChild;
+            newRoot->childs[(root->string)[0]] = root;
+            (newRoot->childCounter) = 2;
+            // printf("-< %s | '%s' - '%s' | %ld\n", newRoot->string, newChild->string, root->string, i);
             return newRoot;
         }
     }
@@ -143,19 +144,25 @@ void destroyTrieNodeLocally(trieNode *node) {
     free(node);
 }
 
-void collectWithPrefix(char *string, trieNode *root, ListNode *queryResult) {
+void collectWithPrefix(char *prefix, trieNode *root, ListNode *queryResult) {
     if (root != NULL) {
         size_t i = 0;
-        for (; string[i] != '\0' && root->string[i] != '\0' && root->string[i] == string[i]; i++)
+        for (; prefix[i] != '\0' && root->string[i] != '\0' && root->string[i] == prefix[i]; i++)
             ;
         if (i) {
-            if (strlen(string) == strlen(root->string)) {
+            if (strlen(prefix) == i) {
                 collectAllStrings(root, queryResult);
-            } else if (i == strlen(root->string))
-                collectWithPrefix(string + i, root->childs[string[i]], queryResult);
+            } else if (strlen(root->string) == i) {
+                strncat(stringBuffer, prefix, i);
+                collectWithPrefix(prefix + i, root->childs[prefix[i]], queryResult);
+                memset((void *)stringBuffer, '\0', 512);
+            }
+        } else if (strlen(root->string) == 0) {
+            collectWithPrefix(prefix, root->childs[prefix[0]], queryResult);
         }
     }
 }
+// gcc ../dataStructures/hashTable/dependencies/murmur3.c ../dataStructures/hashTable/hashTable.c ../dataStructures/linkedList/linkedList.c ../dataStructures/triePatricia/triePatricia.c parseCSV.c
 
 void collectAllStrings(trieNode *root, ListNode *queryResult) {
     if (root != NULL) {
@@ -163,7 +170,9 @@ void collectAllStrings(trieNode *root, ListNode *queryResult) {
             strcat(stringBuffer, root->string);
             pushListNode((void *)allocString(stringBuffer), queryResult);
         } else {
-            strcat(stringBuffer, root->string);
+            if (strlen(root->string) > 0) {
+                strcat(stringBuffer, root->string);
+            }
             int n = strlen(stringBuffer);
             if (root->isEndOfWord) {
                 pushListNode((void *)allocString(stringBuffer), queryResult);
@@ -187,4 +196,19 @@ size_t wordCounter(trieNode *root) {
         return words;
     }
     return 0;
+}
+
+void printPatricia(trieNode *root) {
+    if (root != NULL) {
+        if (root->isEndOfWord)
+            printf("*");
+        printf("%s", root->string);
+        if (root->parent != NULL) {
+            printf(", %s", root->parent->string);
+        }
+        printf(" Childs: %d\n", root->childCounter);
+        for (size_t i = 0; i < ALPHABET_SIZE; i++) {
+            printPatricia(root->childs[i]);
+        }
+    }
 }

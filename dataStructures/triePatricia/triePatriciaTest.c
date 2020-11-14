@@ -10,32 +10,28 @@ int main() {
     trieNode* Tree = createTrieNode();
     stringHashTable* hashTable = createHashTable(10, CLOSED_ADDRESS_CR, POLYNOMIAL_HASHING_FUNCTION);
 
-    // Tree = insertNode("BANANA", Tree);
+    Tree = insertNode("BANANA", 12, Tree);
     // hashTable->add(hashTable, "BANANA");
 
-    // Tree = insertNode("BATMAN", Tree);
+    Tree = insertNode("DART", 12, Tree);
     // hashTable->add(hashTable, "BATMAN");
 
-    // Tree = insertNode("BANAL", Tree);
+    Tree = insertNode("BANAL", 12, Tree);
     // hashTable->add(hashTable, "BANAL");
 
-    // Tree = insertNode("BANIDO", Tree);
+    Tree = insertNode("BANIDO", 12, Tree);
     // hashTable->add(hashTable, "BANIDO");
 
-    // Tree = insertNode("BAN", Tree);
+    Tree = insertNode("BAN", 12, Tree);
     // hashTable->add(hashTable, "BAN");
 
     printPatricia(Tree);
-    printf("\n");
-    deleteNode("BAN", Tree);
-    deleteNode("BANANA", Tree);
-    printPatricia(Tree);
     ListNode* queryResult = createListNode();
     collectWithPrefix("BA", Tree, queryResult);
-    printf("\n");
+    // printf("\n");
     printList(queryResult);
     printf("\n");
     printf("\n");
-    printHashTable(hashTable, TRUE);
+    // printHashTable(hashTable, TRUE);
     return 0;
 }
