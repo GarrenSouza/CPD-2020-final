@@ -86,11 +86,17 @@ int main(void) {
             } else
                 printf("No matches found!\n");
             destroyListNode(query);
-        } else if (strcmp(readBuffer, "help") == 0) {
-            printf("Available commands are:\n");
-            printf("   %s - Clear the screen\n", clearCommand);
-            printf("   movie [Movie title prefix] - Search the database for movies starting with the given prefix and print them in the screen \n");
-            printf("   help - Print this magnificent manual\n");
+        } else if (strncmp(readBuffer, "help ", 4) == 0) {
+            if (strncmp(readBuffer + 4, " pls ", 4)) {
+                printf("Who do you think you are? Hur I want help 'help' hur dur!\n");
+            } else {
+                printf("Well, that's nice of you to ask so kindly!\n");
+                printf("The available commands are:\n");
+                printf("   %s - Clear the screen\n", clearCommand);
+                printf("   movie [Movie title prefix] - Search the database for movies starting with the given prefix and print them in the screen \n");
+                printf("   exit - Closes the application console\n");
+                printf("   help - Print this magnificent manual\n");
+            }
         } else if (readBuffer[0] != '\0') {
             printf("Are you having a stroke?\n");
         }
