@@ -89,9 +89,24 @@ int ClosedAddressingSearch(stringHashTable *hashTable, char *string) {
     return -1;
 }
 
+stringNode *ClosedAddressingGetEntry(stringHashTable *hashTable, char *string) {
+    stringNode *iterator = *(hashTable->dataArray + (hashTable->mainHashingFunction(string, hashTable->type & 1 ? MURMUR_SEED_COEFCIENT : POLYNOMIAL_COEFCIENT) % hashTable->size));
+    int iterations = 0;
+    while (iterator != NULL) {
+        iterations++;
+        if (strcmp(string, iterator->string) == 0) {
+            hashTable->entriesCheckedSoFar += iterations;
+            return iterator;
+        }
+        iterator = iterator->nextString;
+    }
+    hashTable->entriesCheckedSoFar += iterations;
+    return NULL;
+}
+
 // // Open Addressing
 
-int OpenAddressingInsert(stringHashTable *hashTable, char *string, size_t ID, ListNode *genres){
+int OpenAddressingInsert(stringHashTable *hashTable, char *string, size_t ID, ListNode *genres) {
     if ((hashTable->load) < (hashTable->size) && hashTable->searchKey(hashTable, string) == -1) {
         uint32_t hash = hashTable->mainHashingFunction(string, hashTable->type & 1 ? MURMUR_SEED_COEFCIENT : POLYNOMIAL_COEFCIENT);
         uint32_t hashTableSize = hashTable->size;
@@ -214,6 +229,7 @@ stringHashTable *createHashTable(size_t size, uint8_t addressingMode,
                 newStringHashtable->add = ClosedAddressingInsert;
                 newStringHashtable->delete = ClosedAddressingDelete;
                 newStringHashtable->searchKey = ClosedAddressingSearch;
+                newStringHashtable->getEntry = ClosedAddressingGetEntry;
                 break;
             default:
                 return NULL;
@@ -256,7 +272,10 @@ void printHashTable(stringHashTable *hashTable, int printEntries) {
             for (size_t i = 0; i < hashTable->size; i++) {
                 aux = *(hashTable->dataArray + i);
                 while (aux != NULL) {
-                    printf("> %s\n", aux->string);
+                    printf("> Title %s\n", aux->string);
+                    printf("--ID %ld\n", aux->ID);
+                    printf("--Genres\n");
+                    printList(aux->genres);
                     aux = aux->nextString;
                 }
             }

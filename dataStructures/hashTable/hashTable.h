@@ -2,9 +2,8 @@
 #include <stdio.h>
 
 #ifndef LINKED_LIST
-
+#define LINKED_LIST
 #include "../linkedList/linkedList.h"
-
 #endif
 
 #ifndef _HASH_CONFIG
@@ -39,6 +38,7 @@ typedef struct stringHashTable {
     int (*delete)(struct stringHashTable *, char *string),
         (*searchKey)(struct stringHashTable *, char *string),
         (*add)(struct stringHashTable *hashTable, char *string, size_t ID, ListNode *genres);
+    stringNode *(*getEntry)(struct stringHashTable *hashTable, char *string);
 } stringHashTable;
 
 // HashTable Methods
@@ -52,12 +52,15 @@ void printHashTable(stringHashTable *hashTable, int printEntries);
 int ClosedAddressingInsert(stringHashTable *hashTable, char *string, size_t ID, ListNode *genres);
 int ClosedAddressingDelete(stringHashTable *hashTable, char *string);
 int ClosedAddressingSearch(stringHashTable *hashTable, char *string);
+stringNode *ClosedAddressingGetEntry(stringHashTable *hashTable, char *string);
 
 // Open Address Methods
 int OpenAddressingInsert(stringHashTable *hashTable, char *string, size_t ID, ListNode *genres);
 int OpenAddressingDelete(stringHashTable *hashTable, char *string);
 int OpenAddressingSearch(stringHashTable *hashTable, char *string);
+stringNode *OpenAddressingGetEntry(stringHashTable *hashTable, char *string);  // Needs implementation
 
 // Available Hashing Functions
 uint32_t polynomialHashing(char *string, uint32_t coeficient);
 uint32_t murmurHashing(char *string, uint32_t seed);
+uint32_t knuthsIntegerHashing(char *string, uint32_t seed);  // Needs implementation
