@@ -57,4 +57,5 @@ void printList(ListNode* head) {
         printf("%s\n", (char*)aux->value);
         aux = aux->nextNode;
     }
+    printf("\n");
 }
