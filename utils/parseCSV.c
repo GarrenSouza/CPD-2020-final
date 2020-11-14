@@ -9,13 +9,15 @@
 #include "../dataStructures/hashTable/hashTable.h"
 #include "../dataStructures/triePatricia/triePatricia.h"
 
-void clearScreen() {
 #ifndef _WIN32
-    system("clear");
+static char clearCommand[] = "clear";
 #endif
 #ifdef _WIN32
-    system("cls");
+static char clearCommand[] = "cls";
 #endif
+
+void clearScreen() {
+    system(clearCommand);
 }
 
 int main(void) {
@@ -72,7 +74,7 @@ int main(void) {
     fgets(readBuffer, 256, stdin);
     readBuffer[strlen(readBuffer) - 1] = '\0';
     while (strcmp(readBuffer, "exit")) {
-        if (strcmp(readBuffer, "clear") == 0) {
+        if (strcmp(readBuffer, clearCommand) == 0) {
             clearScreen();
         } else if (strncmp(readBuffer, "movie ", 6) == 0 && strlen(readBuffer) > 6) {
             ListNode* query = createListNode();
@@ -84,8 +86,13 @@ int main(void) {
             } else
                 printf("No matches found!\n");
             destroyListNode(query);
+        } else if (strcmp(readBuffer, "help") == 0) {
+            printf("Available commands are:\n");
+            printf("   %s - Clear the screen\n", clearCommand);
+            printf("   movie [Movie title prefix] - Search the database for movies starting with the given prefix and print them in the screen \n");
+            printf("   help - Print this magnificent manual\n");
         } else if (readBuffer[0] != '\0') {
-            printf("Malformed Input!\n");
+            printf("Are you having a stroke?\n");
         }
         memset((void*)readBuffer, 0, 256);
         printf("garren&Pedro@CPD2020:~/%s$ ", fileName);
