@@ -30,4 +30,8 @@ void printPatricia(trieNode *root);
 char *allocString(char *string);
 void collectWithPrefix(char *string, trieNode *root, ListNode *queryResult);
 void collectAllStrings(trieNode *root, ListNode *queryResult);
+
+void collectAllIDs(trieNode *root, ListNode *queryResult);
+void collectIDsWithPrefix(char *prefix, trieNode *root, ListNode *queryResult);
+
 size_t wordCounter(trieNode *root);

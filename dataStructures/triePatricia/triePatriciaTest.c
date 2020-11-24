@@ -8,7 +8,7 @@ int main() {
     // char *string = (char *)malloc(4 * sizeof(char));
     // free(string + 1);
     trieNode* Tree = createTrieNode();
-    stringHashTable* hashTable = createHashTable(10, CLOSED_ADDRESS_CR, POLYNOMIAL_HASHING_FUNCTION);
+    hashTable* hashTable = createHashTable(10, CLOSED_ADDRESS_CR, POLYNOMIAL_HASHING_FUNCTION);
 
     Tree = insertNode("BANANA", 12, Tree);
     // hashTable->add(hashTable, "BANANA");

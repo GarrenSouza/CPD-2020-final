@@ -46,6 +46,7 @@ ListNode* popListNode(ListNode* head) {
         }
         if (prev != NULL)
             prev->nextNode = NULL;
+
         return auxNode;
     }
     return NULL;
@@ -58,4 +59,15 @@ void printList(ListNode* head) {
         aux = aux->nextNode;
     }
     printf("\n");
+}
+
+ListNode* searchListNode(ListNode* head, void* value, int (*cmpr)(void*, void*)) {
+    if (head != NULL) {
+        ListNode* aux = head->nextNode;
+        while (aux != NULL) {
+            if (cmpr(value, aux->value) == 0) return aux;
+            aux = aux->nextNode;
+        }
+    }
+    return NULL;
 }

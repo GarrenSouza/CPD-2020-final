@@ -184,6 +184,38 @@ void collectAllStrings(trieNode *root, ListNode *queryResult) {
         }
     }
 }
+void collectIDsWithPrefix(char *prefix, trieNode *root, ListNode *queryResult) {
+    if (root != NULL) {
+        size_t i = 0;
+        for (; prefix[i] != '\0' && root->string[i] != '\0' && root->string[i] == prefix[i]; i++)
+            ;
+        if (i) {
+            if (strlen(prefix) == i) {
+                collectAllIDs(root, queryResult);
+            } else if (strlen(root->string) == i) {
+                collectIDsWithPrefix(prefix + i, root->childs[prefix[i]], queryResult);
+            }
+        } else if (strlen(root->string) == 0) {
+            collectIDsWithPrefix(prefix, root->childs[prefix[0]], queryResult);
+        }
+    }
+}
+
+void collectAllIDs(trieNode *root, ListNode *queryResult) {
+    if (root != NULL) {
+        if (root->childCounter == 0) {
+            pushListNode((void *)&root->ID, queryResult);
+            // printf("%ld\n", *((size_t *)((void *)&root->ID)));
+        } else {
+            if (root->isEndOfWord) {
+                pushListNode((void *)&root->ID, queryResult);
+            }
+            for (size_t i = 0; i < ALPHABET_SIZE; i++) {
+                collectAllIDs(root->childs[i], queryResult);
+            }
+        }
+    }
+}
 
 size_t wordCounter(trieNode *root) {
     if (root != NULL) {

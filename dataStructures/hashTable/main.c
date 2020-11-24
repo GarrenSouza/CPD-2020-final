@@ -88,7 +88,7 @@ int main() {
     a = a & ~1 ? 1 : a;
     h = h & ~1 ? 1 : h;
     stringList *namesToInsert = getFileNames("arquivos-nomes-consultas/nomes_10000.txt");
-    stringHashTable *s = createHashTable(HASH_TABLE_SIZE, a, h);
+    hashTable *s = createHashTable(HASH_TABLE_SIZE, a, h);
     for (size_t i = 0; i < namesToInsert->listSize; i++) {
         s->add(s, *(namesToInsert->names + i));
     }
